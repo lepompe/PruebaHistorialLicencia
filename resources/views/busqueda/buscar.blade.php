@@ -16,14 +16,14 @@
     <br>
     
         <button type="menu" class="btn btn-default dropdown-toggle"  data-toggle="dropdown"> 
-           - Seleccionar -  <span class="caret"></span>
+           @yield('seleccionar','- Seleccionar -')  <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a href="#">CURP</a></li>
-            <li><a href="#">Datos Personales</a></li>
+            <li><a href="{{ url('busqueda/curp') }}">CURP</a></li>
+            <li><a href="{{ url('busqueda/datos_personales') }}">Datos Personales</a></li>
         </ul>
 
 </div>
 @yield('buscarContent')
-    <button type="submit" class="btn btn-pimary">Buscar</button>
+<button type="submit" class="btn btn-primary">Buscar</button>
 @endsection

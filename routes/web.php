@@ -15,3 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('busqueda', 'BusquedaController@busqueda');
+
+route::get('busqueda/curp', 'BusquedaController@curp');
+route::get('busqueda/datos_personales', 'BusquedaController@datos_personales');
