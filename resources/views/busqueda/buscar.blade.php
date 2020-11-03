@@ -25,5 +25,5 @@
 
 </div>
 @yield('buscarContent')
-<button type="submit" class="btn btn-primary">Buscar</button>
+
 @endsection
