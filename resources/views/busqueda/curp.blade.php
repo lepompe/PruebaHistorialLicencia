@@ -4,7 +4,7 @@
 @endsection
 @section('buscarContent')
 <div class="form-group">
-    <form files="true" method="GET" action="/busqueda/buscar-curp">
+    <form class="form-group" files="true" method="GET" action="/busqueda/buscar-curp">
         <div>
             <div>
                 <i></i>

@@ -18,5 +18,6 @@ Route::get('busqueda', 'BusquedaController@busqueda');
 
 route::get('busqueda/curp', 'DatoGralController@curp');
 route::get('busqueda/buscar-curp', 'DatoGralController@buscar_curp');
+route::get('busqueda/buscar-datos-personales', 'DatoGralController@buscar_datos_personales');
 route::get('busqueda/datos_personales', 'DatoGralController@datos_personales');
 
