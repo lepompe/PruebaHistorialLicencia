@@ -4,28 +4,28 @@
 
 @section('content')
     <h2>VISTA PREVIA</h2>
-    @foreach ($curps as $curp)
-        <label for="">{{$curp->Dat_Folio}}</label>
-        <label for="">{{$curp->Dat_Nombre}}</label>
-        <label for="">{{$curp->Dat_Paterno}}</label>
-        <label for="">{{$curp->Dat_Materno}}</label>
-        <label for="">{{$curp->Dat_fecnac}}</label>
-        <label for="">{{$curp->Dat_RFC}}</label>
-        <label for="">{{$curp->Dat_CURP}}</label>
-        @if ($curp->Sex_id==1)
-            <label for="">Masculino</label>
-        @elseif ($curp->Sex_id==2)
-            <label for="">Femenino</label>    
-        @elseif ($curp->Sex_id==0)
-            <label for="">Sin información</label>
-        @endif
-        <label for="">{{$curp->Dat_telefono}}</label>
-        <label for="">{{$curp->Dat_Edad}}</label>
-        <label for="">{{$curp->Dat_Lentes}}</label>
-        <label for="">{{$curp->Dat_Alergias}}</label>
-        <label for="">{{$curp->Dat_Padecimientos}}</label>
-        <label for="">{{$curp->TipSan_id}}</label>   
-@endforeach
+        <table class="table">
+            <tr>
 
-                   
+                <th>Nombres</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th>Curp</th>
+                <th>Numero de licencia</th>
+        
+            </tr>
+      
+            <tr>
+                @foreach ($licencias as $licencia)
+                    <td>{{$curp->Dat_Nombre}}</td>
+                    <td>{{$curp->Dat_Paterno}}</td>
+                    <td>{{$curp->Dat_Materno}}</td>
+                    <td>{{$curp->Dat_CURP}}</td>
+                    <td>{{$licencia->Lic_NumFolioAnterior}}</td>     
+                @endforeach
+                
+            </tr>
+      </table>  
+
+                     
 @endsection

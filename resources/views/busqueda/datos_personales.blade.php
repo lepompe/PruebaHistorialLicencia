@@ -12,7 +12,7 @@
             </div>
 
             <div>
-                <input type="search" name="nombres" autofocus>
+                <input type="search" name="nombres" required autofocus>
                 
             </div>
 
@@ -22,7 +22,7 @@
             </div>
 
             <div>
-                <input type="search" name="apellido_paterno" autofocus>
+                <input type="search" name="apellido_paterno" required autofocus>
                 
             </div>
 
@@ -32,7 +32,7 @@
             </div>
 
             <div>
-                <input type="search" name="apellido_materno" autofocus>
+                <input type="search" name="apellido_materno" required autofocus>
                 
             </div>
 
@@ -42,7 +42,7 @@
             </div>
 
             <div>
-                <input type="search" name="rfc" autofocus>
+                <input type="search" name="rfc" required autofocus>
                 
             </div>
         </div>

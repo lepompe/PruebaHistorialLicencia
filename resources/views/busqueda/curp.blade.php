@@ -12,7 +12,7 @@
             </div>
 
             <div>
-                <input type="search" name="curp" autofocus>
+                <input type="search" name="curp" required autofocus>
                 
             </div>
         </div>
