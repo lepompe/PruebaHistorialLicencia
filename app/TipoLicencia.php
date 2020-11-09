@@ -3,13 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\datoGral;
+use App\Licencia;
 
 class TipoLicencia extends Model
 {
-    protected $table = "dbo.Lic_Licencias";
+    protected $table = "dbo.TipLic_TipoLicencia";
 
-    public function datogral() {
-        return $this->belongsTo(datoGral::class);
+    public function licencia() {
+        return $this->hasMany(Licencia::class);
     }
 }

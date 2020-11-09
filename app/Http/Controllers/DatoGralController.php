@@ -6,44 +6,67 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BusquedaController;
 use App\datoGral;
 use App\TipoLicencia;
+use App\Licencia;
 use validator;
 use DB;
+use Response;
 
 class DatoGralController extends Controller
 {
-    public function curp() {
-        return view('busqueda.curp');
-         
 
-    }
-    
-    public function datos_personales() {
-        return view('busqueda.datos_personales');
-    }
+   public function buscar_datos(Request $request) {
 
-    public function buscar_curp(Request $request) {
-        
-        $curp = datoGral::where('Dat_CURP','=',$request->input('curp'))
+        $persona = datoGral::where('Dat_Nombre','=',$request->input('nombres'))
+                ->where('Dat_Paterno','=',$request->input('apellido_paterno'))
+                ->where('Dat_Materno','=',$request->input('apellido_materno'))
+                ->where('Dat_CURP','=',$request->input('curp'))
                 ->firstOrFail();
 
-        $licencias = TipoLicencia::where('Dat_Id','=',$curp->Dat_id)
-                ->get();
-        $tiplic = TipoLicencia::where('TipLic_Id','=',3);
-            return view('vista_previa.vista_curp', compact('curp','licencias'));
+        $licencia = Licencia::join('dbo.TipLic_TipoLicencia', 'TipLic_TipoLicencia.TipLic_id', '=', 'Lic_Licencias.TipLic_Id')
+        ->select('Lic_Licencias.*','TipLic_TipoLicencia.TipLic_Descripcion')
+        ->where('Lic_NumFolioAnterior','=',$request->input('numero_licencia'));
+        
+        $json = array();
+        $data = $licencia->get()->toArray();
+        $json = json_decode(json_encode($data), true);
+        
+        foreach ($json as $value) {
+                $cadena = response()->json([
+                        "datos" => (object)array(
+                                "0" => (object)array(
+                                        "0" => (object)array(
+                                                "0" => "Datos del Historial de Licencias"
+                                        ),
+                                        "1" => (object)array(
+                                                "0" => "Número de Licencia",
+                                                "1" => $value['Lic_NumFolioAnterior']
+                                        ),
+                                        "2" => (object)array(
+                                                "0" => "Tipo de Licencia",
+                                                "1" => $value['TipLic_Descripcion']
+                                        ),
+                                        "3" => (object)array(
+                                                "0" => "Número de Expediente",
+                                                "1" => $value['Lic_Expediente']
+                                        ),
+                                        "4" => (object)array(
+                                                "0" => "Vigencia",
+                                                "1" => $value['Lic_Vigencia']
+                                        ),
+                                        "5" => (object)array(
+                                                "0" => "Fecha de Expedición",
+                                                "1" => $value['Lic_Expedicion']
+                                        ),
+                                        "6" => (object)array(
+                                                "0" => "Fecha de Vencimiento",
+                                                "1" => $value['Lic_Vencimiento']
+                                        )
+                                )
+                        )
+                ]);
+                return $cadena;
+        }
 
-       
-   }
-
-   public function buscar_datos_personales(Request $request) {
-        $datos_personales = datoGral::where('Dat_Nombre','=',$request->input('nombres'))
-            ->where('Dat_Paterno','=',$request->input('apellido_paterno'))
-            ->where('Dat_Materno','=',$request->input('apellido_materno'))
-            ->where('Dat_RFC','=',$request->input('rfc'))
-            ->firstOrFail();
-
-            $licencias = TipoLicencia::where('Dat_Id','=',$datos_personales->Dat_id)
-            ->get();
-            
-        return view('vista_previa.vista_datos_personales', compact('datos_personales', 'licencias'));
+/*         return view('vista_previa.vista_datos', compact('licencia'));  */
    }
 }

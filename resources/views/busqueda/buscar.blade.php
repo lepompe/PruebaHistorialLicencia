@@ -6,24 +6,57 @@
 <div class="form-group">
     <h2>BUSQUEDA</h2>
     <hr>
-    <label for="">Puedes realizar la busqueda por cualquiera de estos métodos:</label>
-    <br>
-    <ol>
-        <li><p>Con la Clave Única de Registro de Población (CURP)</p></li>
-        <li><p>A través de los datos personales</p></li>
-    </ol>
-    <label for="">Puedes buscar tu licencia por cualquiera de estos métodos <label style="color: red"> *</label></label>
-    <br>
-    
-        <button type="menu" class="btn btn-default dropdown-toggle"  data-toggle="dropdown"> 
-           @yield('seleccionar','- Seleccionar -')  <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            <li><a href="{{ url('busqueda/curp') }}">CURP</a></li>
-            <li><a href="{{ url('busqueda/datos_personales') }}">Datos Personales</a></li>
-        </ul>
-
+    <label for="">Puedes realizar la busqueda por cualquiera de este métodos:</label>
 </div>
-@yield('buscarContent')
+<div class="form-group">
+    <form class="form-group" files="true" method="GET" action="/busqueda/vista-datos">
+        <div>
+            <div>
+                <label for="">Nombres <label style="color: red"> *</label></label>
+            </div>
 
+            <div>
+                <input type="search" name="nombres" required autofocus>
+                
+            </div>
+
+            <div>
+                <label for="">Apellido Paterno <label style="color: red"> *</label></label>
+            </div>
+
+            <div>
+                <input type="search" name="apellido_paterno" required autofocus>
+                
+            </div>
+
+            <div>
+                <label for="">Apellido Materno <label style="color: red"> *</label></label>
+            </div>
+
+            <div>
+                <input type="search" name="apellido_materno" required autofocus>
+                
+            </div>
+
+            <div>
+                <label for="">Clave Única de Registro de Población (CURP) <label style="color: red"> *</label></label>
+            </div>
+            
+            <div>
+                <input type="search" name="curp" required autofocus>
+                
+            </div>
+
+            <div>
+                <label for="">Numero de licencia <label style="color: red"> *</label></label>
+            </div>
+
+            <div>
+                <input type="search" name="numero_licencia" required autofocus>
+                
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary"><i>Buscar</i></button>
+    </form>
+</div>
 @endsection
