@@ -9,7 +9,7 @@
     <label for="">Puedes realizar la busqueda por cualquiera de este métodos:</label>
 </div>
 <div class="form-group">
-    <form class="form-group" files="true" method="GET" action="/busqueda/vista-datos">
+    <form class="form-group" files="true" method="GET" action="/busqueda/vista_datos">
         <div>
             <div>
                 <label for="">Nombres <label style="color: red"> *</label></label>

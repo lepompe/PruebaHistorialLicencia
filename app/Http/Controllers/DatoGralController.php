@@ -38,7 +38,7 @@ class DatoGralController extends Controller
                                                 "0" => "Datos del Historial de Licencias"
                                         ),
                                         "1" => (object)array(
-                                                "0" => "Número de Licencia",
+                                                "0" => "Numero de Licencia",
                                                 "1" => $value['Lic_NumFolioAnterior']
                                         ),
                                         "2" => (object)array(
@@ -46,7 +46,7 @@ class DatoGralController extends Controller
                                                 "1" => $value['TipLic_Descripcion']
                                         ),
                                         "3" => (object)array(
-                                                "0" => "Número de Expediente",
+                                                "0" => "Numero de Expediente",
                                                 "1" => $value['Lic_Expediente']
                                         ),
                                         "4" => (object)array(
@@ -54,7 +54,7 @@ class DatoGralController extends Controller
                                                 "1" => $value['Lic_Vigencia']
                                         ),
                                         "5" => (object)array(
-                                                "0" => "Fecha de Expedición",
+                                                "0" => "Fecha de Expedicion",
                                                 "1" => $value['Lic_Expedicion']
                                         ),
                                         "6" => (object)array(
