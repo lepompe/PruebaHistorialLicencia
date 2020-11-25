@@ -14,10 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('busqueda', 'BusquedaController@busqueda');
+Route::get('busqueda/vista_datos/{nombres}/{apellido_paterno}/{apellido_materno}/{curp}/{numero_licencia}', 'DatoGralController@buscar_datos');
 /* route::get('busqueda/vista-datos/{nombres}/{apellido_paterno}/{apellido_materno}/{curp}/{numero_licencia}', 'DatoGralController@buscar_datos'); */
 
 /* route::get('busqueda/vista-datos', 'DatoGralController@buscar_datos'); */
- Route::get('busqueda/vista_datos', 'DatoGralController@buscar_datos');
+/*  Route::get('busqueda/vista_datos', 'DatoGralController@buscar_datos'); */
 
-
+Route::get('busqueda/vista_datos/{nombres}/{apellido_paterno}/{apellido_materno}/{curp}/{numero_licencia}/ver_pdf', 'PDFController@verpdf');
+Route::get('busqueda/vista_datos/{nombres}/{apellido_paterno}/{apellido_materno}/{curp}/{numero_licencia}/imprimir_pdf', 'PDFController@imprimirpdf');
