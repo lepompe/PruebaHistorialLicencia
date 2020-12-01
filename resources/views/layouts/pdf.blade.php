@@ -66,7 +66,7 @@
 
     <p class="principal">A PETICIÓN DE LA PARTE INTERESADA Y PARA LOS FINES LEGALES CORRESPONDIENTES A QUE HAYA LUGAR, SE
         EXTIENDE EL PRESENTE HISTORIAL DE LICENCIA, EN LA CIUDAD CHETUMAL CAPITAL DEL ESTADO DE QUINTANA
-        ROO, A LOS DIAS DEL MES DE DEL DOS MIL VEINTE.</p>
+        ROO, A LOS {{ date('d') }} DIAS DEL MES DE {{ strtoupper($meses[date('n')-1]) }} DEL DOS MIL VEINTE.</p>
 
         <div class="container-mid">
             

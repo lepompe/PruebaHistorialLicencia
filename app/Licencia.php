@@ -9,6 +9,7 @@ use App\TipoLicencia;
 class Licencia extends Model
 {
     protected $table = "dbo.Lic_Licencias";
+    /* protected $connection = 'sqlsrv'; */
 
     public function datogral() {
         return $this->hasMany(datoGral::class);
