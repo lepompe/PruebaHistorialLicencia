@@ -14,7 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('busqueda/vista_datos/{nombres}/{apellido_paterno}/{apellido_materno}/{curp}/{numero_licencia}', 'DatoGralController@buscar_datos');
+Route::post('/API1', 'DatoGralController@buscar_datos');
 /* route::get('busqueda/vista-datos/{nombres}/{apellido_paterno}/{apellido_materno}/{curp}/{numero_licencia}', 'DatoGralController@buscar_datos'); */
 
 /* route::get('busqueda', 'BusquedaController@busqueda'); */
