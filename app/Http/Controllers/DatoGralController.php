@@ -7,6 +7,8 @@ use App\Http\Controllers\BusquedaController;
 use App\datoGral;
 use validator;
 use App\token;
+use App\Estado;
+use App\Solicitud;
 use DB;
 use Response;
 
@@ -15,7 +17,7 @@ class DatoGralController extends Controller
 
    public function buscar_datos(Request $request) 
         {
-                $token_web_form = '234534563241456789654321456789654322145678';
+                
 
                 $data = [
                         "ews_token" => strip_tags(trim($request->input('ews_token'))),
@@ -31,7 +33,7 @@ class DatoGralController extends Controller
                         "ews_licencia" => strip_tags(trim($request->input('ews_licencia')))
                 ];
                 $data = (object) $data;
-
+                $token_web_form = '234534563241456789654321456789654322145678';
                 if($token_web_form == $data->ews_token) {
                                 if(empty($data->ews_llave) || 
                                 empty($data->ews_id_tramite) || 
@@ -52,45 +54,89 @@ class DatoGralController extends Controller
                                 ->where('Dat_Folio','=',$data->ews_licencia)
                                 ->get();
 
-                                $cadena = [];
+                                $json = array();
+                                $persona_data = $persona->toArray();
+                                $json = json_decode(json_encode($data), true);
+                                /* crear un estado en la tabla estados */
+                                $saveEstado = new Estado;
+                                $saveEstado->nombre = 'INICIADO';
+                                $saveEstado->save();
+                                /* crear numero de solicitud de api */
+                                /* crear una solicitud en la tabla solicitudes */
+                                $saveSolicitud = new Solicitud;
+                                $saveSolicitud->llave = $data->ews_llave;
+                                $saveSolicitud->id_tramite = $data->ews_id_tramite;
+                                $saveSolicitud->no_solicitud = $data->ews_no_solicitud;
+                                $saveSolicitud->fecha_solicitud = $data->ews_fecha_solicitud;
+                                $saveSolicitud->hora_solicitud = $data->ews_hora_solicitud;
+                                $saveSolicitud->no_solicitud_api = '';
+                                $saveSolicitud->fecha_solicitud_api = date('Y-m-d');
+                                $saveSolicitud->hora_solicitud_api = date('H:i:s');
+                                $saveSolicitud->id_estado = $saveEstado->id_estado;
+                                $saveSolicitud->id_electronico = '';
+                                $saveSolicitud->referencia_pago = '';
+                                $saveSolicitud->fecha_pago = date('Y-m-d');
+                                $saveSolicitud->hora_pago = date('H:i:s');
+                                $saveSolicitud->stripe_orden_id = '';
+                                $saveSolicitud->stripe_creado = '';
+                                $saveSolicitud->stripe_mensaje = '';
+                                $saveSolicitud->stripe_tipo = '';
+                                $saveSolicitud->stripe_digitos = '';
+                                $saveSolicitud->stripe_red = '';
+                                $saveSolicitud->stripe_estado = '';
+                                $saveSolicitud->xml_url = '';
+                                $saveSolicitud->no_consulta = '00001';
+                                $saveSolicitud->ews_nombre = '';
+                                $saveSolicitud->ews_apellido_paterno = '';
+                                $saveSolicitud->ews_apellido_materno = '';
+                                $saveSolicitud->ews_curp = '';
+                                $saveSolicitud->ews_licencia = '';
+                                $saveSolicitud->save();
+
+                                $id_save_solicitud = $saveSolicitud->id_solicitud;
+                                $no_solicitud_api = Solicitud::find($id_save_solicitud);
+                                $no_solicitud_api->no_solicitud_api = date('Y').'-'.str_pad($id_save_solicitud, 4, "0", STR_PAD_LEFT);
+                                $no_solicitud_api->save();
+
                                 foreach ($persona as $value) 
                                 {
-                                        $cadena[] = [
-                                                '0' =>[
-                                                        '0' => 'Datos del Historial de Licencias'
-                                                ],
-                                                '1' =>[
-                                                        '0' => 'Numero de Folio',
-                                                        '1' => $value->Dat_Folio
-                                                ],
-                                                '2' =>[
-                                                        '0' => 'Tipo de Licencia',
-                                                        '1' => $value->TipLic_Descripcion
-                                                ],
-                                                '3' =>[
-                                                        '0' => 'Numero de Expediente',
-                                                        '1' => $value->Lic_Expediente
-                                                ],
-                                                '4' =>[
-                                                        '0' => 'Vigencia',
-                                                        '1' => $value->Lic_Vigencia
-                                                ],
-                                                '5' =>[
-                                                        '0' => 'Fecha de Expedicion',
-                                                        '1' => $value->Lic_Expedicion
-                                                ],
-                                                '6' =>[
-                                                        '0' => 'Fecha de Vencimiento',
-                                                        '1' => $value->Lic_Vencimiento
-                                                ]
-                                        ];
-
-                                
-                        }
+                                        
+                                        $cadena = (object)array(
+                                                '0' => (object)array(
+                                                        '0' => (object)array(
+                                                                '0' => 'Datos del Historial de Licencias'
+                                                        ),
+                                                        '1' => (object)array(
+                                                                '0' => 'Numero de Folio',
+                                                                '1' => $value->Dat_Folio
+                                                        ),
+                                                        '2' =>(object)array(
+                                                                '0' => 'Tipo de Licencia',
+                                                                '1' => $value->TipLic_Descripcion
+                                                        ),
+                                                        '3' =>(object)array(
+                                                                '0' => 'Numero de Expediente',
+                                                                '1' => $value->Lic_Expediente
+                                                        ),
+                                                        '4' =>(object)array(
+                                                                '0' => 'Vigencia',
+                                                                '1' => $value->Lic_Vigencia
+                                                        ),
+                                                        '5' =>(object)array(
+                                                                '0' => 'Fecha de Expedicion',
+                                                                '1' => $value->Lic_Expedicion
+                                                        ),
+                                                        '6' =>(object)array(
+                                                                '0' => 'Fecha de Vencimiento',
+                                                                '1' => $value->Lic_Vencimiento
+                                                        ),
+                                                )       
+                                        );        
+                                }
                         return response()->json(['wsp_mensaje'=>'Ciudadano Encontrado',
                                                 'wsp_no_Solicitud'=>$data->ews_no_solicitud,
-                                                'wsp_no_Solicitud_api'=>date('Y').'-'.'000001',
-                                                'wsp_nivel'=>'2',
+                                                'wsp_no_Solicitud_api'=>$no_solicitud_api->no_solicitud_api,
+                                                'wsp_nivel'=>'1',
                                                 'wsp_datos'=>$cadena], 200);
                 } elseif($token_web_form != $data->ews_token){
                         return response()->json(array("wsp_mensaje" => 'Token Invalido' ), 400); 

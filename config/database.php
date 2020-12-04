@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => 'sqlsrv','mysql',
+    'default' => env('DB_CONNECTION','mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -80,11 +80,11 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', 'DESKTOP-K7SRFDS\SQLEXPRESS'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'KIMERA'),
-            'username' => env('DB_USERNAME', 'sa'),
-            'password' => env('DB_PASSWORD', '1234'),
+            'host' => env('sqlsrv_HOST', 'DESKTOP-K7SRFDS\SQLEXPRESS'),
+            'port' => env('sqlsrv_PORT', '1433'),
+            'database' => env('sqlsrv_DATABASE', 'KIMERA'),
+            'username' => env('sqlsrv_USERNAME', 'sa'),
+            'password' => env('sqlsrv_PASSWORD', '1234'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
