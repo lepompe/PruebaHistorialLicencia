@@ -18,4 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/API1', 'DatoGralController@buscar_datos');
-Route::post('/API2', 'DatoGralController@xml');
+Route::post('/API2', 'XmlController@xml');
+Route::post('/API3', 'PDFController@verpdf');

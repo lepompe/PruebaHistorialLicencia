@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\BusquedaController;
 use App\datoGral;
-use validator;
 use App\token;
 use App\Estado;
 use App\Solicitud;
@@ -18,8 +16,11 @@ class DatoGralController extends Controller
    public function buscar_datos(Request $request) 
         {
                 
-                $token_web_form = '234534563241456789654321456789654322145678';
+                $token_web_form = token::select('tokens.*')->where('id_token','=','1')->get();
 
+                foreach($token_web_form as $value){
+                        $token_web = $value->token;
+                }
                 $data = [
                         "ews_token" => strip_tags(trim($request->input('ews_token'))),
                         "ews_no_solicitud" => strip_tags(trim($request->input('ews_no_solicitud'))),
@@ -35,7 +36,8 @@ class DatoGralController extends Controller
                 ];
                 $data = (object) $data;
                 
-                if($token_web_form == $data->ews_token) {
+                if($token_web == $data->ews_token) {
+
                                 if(empty($data->ews_llave) || 
                                 empty($data->ews_id_tramite) || 
                                 empty($data->ews_no_solicitud) || 
@@ -52,17 +54,21 @@ class DatoGralController extends Controller
                                 $persona = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
                                 ->join('dbo.TipLic_TipoLicencia', 'TipLic_TipoLicencia.TipLic_id', '=', 'Lic_Licencias.TipLic_Id')
                                 ->select('Dat_DatosGral.*','Lic_Licencias.*','TipLic_TipoLicencia.TipLic_Descripcion')
+                                ->where('Dat_Nombre','=',$data->ews_nombre)
+                                ->where('Dat_Paterno','=',$data->ews_apellido_paterno)
+                                ->where('Dat_Materno','=',$data->ews_apellido_materno)
+                                ->where('Dat_CURP','=',$data->ews_curp)
                                 ->where('Dat_Folio','=',$data->ews_licencia)
                                 ->get();
-
-/*                                 $json = array();
-                                $persona_data = (object) $persona->toArray();
-                                $json = json_decode(json_encode($persona_data), true); */
-                                /* crear un estado en la tabla estados */
+                                
+                                if($persona == '[]'){
+                                        return response()->json(array("wsp_mensaje" => 'Ciudadano No encontrado'), 200);
+                                }else{
+                                    
                                 $saveEstado = new Estado;
                                 $saveEstado->nombre = 'INICIADO';
                                 $saveEstado->save();
-                                /* crear una solicitud en la tabla solicitudes */
+                              
                                 $saveSolicitud = new Solicitud;
                                 $saveSolicitud->llave = $data->ews_llave;
                                 $saveSolicitud->id_tramite = $data->ews_id_tramite;
@@ -85,7 +91,7 @@ class DatoGralController extends Controller
                                 $saveSolicitud->stripe_red = '';
                                 $saveSolicitud->stripe_estado = '';
                                 $saveSolicitud->xml_url = '';
-                                $saveSolicitud->no_consulta = '00001';
+                                $saveSolicitud->no_consulta = '1';
                                 foreach ($persona as $dato){
                                         $saveSolicitud->ews_nombre = $dato->Dat_Nombre;
                                         $saveSolicitud->ews_apellido_paterno = $dato->Dat_Paterno;
@@ -93,9 +99,11 @@ class DatoGralController extends Controller
                                         $saveSolicitud->ews_curp = $dato->Dat_CURP;
                                         $saveSolicitud->ews_licencia = $dato->Dat_Folio;
                                 }
-                                $saveSolicitud->id_token = '3';
+                                foreach($token_web_form as $id_token){
+                                        $saveSolicitud->id_token = $id_token->id_token;
+                                }
                                 $saveSolicitud->save();
-                                /* guardar id_solicitud_api en la solicitud creada */
+                                
                                 $id_save_solicitud = $saveSolicitud->id_solicitud;
                                 $no_solicitud_api = Solicitud::find($id_save_solicitud);
                                 $no_solicitud_api->no_solicitud_api = date('Y').'-'.str_pad($id_save_solicitud, 4, "0", STR_PAD_LEFT);
@@ -140,45 +148,12 @@ class DatoGralController extends Controller
                                                 'wsp_no_Solicitud'=>$data->ews_no_solicitud,
                                                 'wsp_no_Solicitud_api'=>$no_solicitud_api->no_solicitud_api,
                                                 'wsp_nivel'=>'1',
-                                                'wsp_datos'=>$cadena], 200);
-                } elseif($token_web_form != $data->ews_token){
+                                                'wsp_datos'=>$cadena], 200);   
+                                }
+
+                                 
+                } elseif($token_web != $data->ews_token){
                         return response()->json(array("wsp_mensaje" => 'Token Invalido' ), 400); 
-                }               
-        }
-        public function xml(Request $request){
-                $token_web_form = '234534563241456789654321456789654322145678';
-
-                $data = [
-                        "ews_token" => strip_tags(trim($request->input('ews_token'))),
-                        "ews_no_solicitud" => strip_tags(trim($request->input('ews_no_solicitud')))
-                ];
-                $data = (object) $data;
-
-                if($token_web_form==$data->ews_token){
-                        if(empty($data->ews_no_solicitud)){
-                                return response()->json(array("wsp_mensaje" => 'falta información' ), 400);
-                        }
-
-                        $solicitud = Solicitud::select('solicitudes.*')->where('no_solicitud','=',$data->ews_no_solicitud)->get();
-                        foreach($solicitud as $value){
-                                $no_licencia_api = $value->ews_licencia;
-                        }
-                        $persona = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
-                                ->join('dbo.TipLic_TipoLicencia', 'TipLic_TipoLicencia.TipLic_id', '=', 'Lic_Licencias.TipLic_Id')
-                                ->select('Dat_DatosGral.Dat_Nombre',
-                                'Dat_DatosGral.Dat_Paterno',
-                                'Dat_DatosGral.Dat_Materno',
-                                'Lic_Licencias.Lic_Expediente',
-                                'Lic_Licencias.Lic_Expedicion',
-                                'Lic_Licencias.Lic_Vencimiento',
-                                'TipLic_TipoLicencia.TipLic_Descripcion')
-                                ->where('Dat_DatosGral.Dat_Folio','=',$no_licencia_api)
-                                ->get();
-                        return $persona;
-                }else{
-                        return response()->json(array("wsp_mensaje" => 'Token Inválido' ), 403);
-                }
-                
-
+                }                
         }
 }

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <!-- estilos -->
-    <link href="css/pdf.css" rel="stylesheet">
+    <link href="{{ asset(css/pdf.css) }}" rel="stylesheet">
     <!-- fuentes -->
 
 
@@ -13,8 +13,8 @@
 </head>
 <body>
     <header>
-        <img src="img/qr.jpg" alt="" id="qr">
-        <img src="img/ssp.jpg" alt="" id="ssp">
+        <img src="{{ asset(img/qr.jpg) }}" alt="" id="qr">
+        <img src="{{ asset(img/ssp.jpg) }}" alt="" id="ssp">
             <div class="container-top">
                 <p class="depen negritas">Dependencia: </p>
                 <p class="depen negritas linea">DIRECCION ESTATAL DE TRANSITO</p>
@@ -87,7 +87,7 @@
             <p>(983) 83 29600 y 83 24141, Ext. 140</p>
             <p>Chetumal, Quintana Roo, México</p>
         </div>
-        <img src="img/footer.png" alt="" id="footer">
+        <img src="{{ asset(img/footer.png) }}" alt="" id="footer">
     </div> 
 </footer>
 </body>

@@ -47,6 +47,10 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
+        'xml' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/create_xml'),
+        ],
 
         'public' => [
             'driver' => 'local',
