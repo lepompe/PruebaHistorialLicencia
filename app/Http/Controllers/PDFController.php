@@ -37,11 +37,13 @@ class PDFController extends Controller
                 $solicitud = Solicitud::select('solicitudes.*')->where('no_solicitud','=',$data->ews_no_solicitud)->get();
                 
                 foreach($solicitud as $value){
+                        $id_solicitud = $value->id_solicitud;
                         $nombre_persona = $value->ews_nombre;
                         $materno_persona = $value->ews_apellido_materno;
                         $paterno_persona = $value->ews_apellido_paterno;
                         $curp_persona = $value->ews_curp;
                         $datos_licencia = $value->ews_licencia;
+                        $no_consulta = $value->no_consulta;
                 }
 
                 $persona = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
@@ -60,6 +62,15 @@ class PDFController extends Controller
                 
                 $meses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
+                $nueva_consulta = $no_consulta++;
+                $saveConsulta = Solicitud::find($id_solicitud);
+                if($no_consulta == ''){
+                        $saveConsulta->no_consulta = '1';
+                }elseif($no_consulta != '1'){
+                        $saveConsulta->no_consulta = $nueva_consulta;
+                }
+                $saveConsulta->save();
+                
                 $pdf = \PDF::loadView('layouts\pdf', compact('persona','licencia','meses'));
                 return $pdf->stream('historial de licencia.pdf');
         }else{
