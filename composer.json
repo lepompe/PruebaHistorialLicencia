@@ -8,6 +8,7 @@
     ],
     "license": "MIT",
     "require": {
+        "simplesoftwareio/simple-qrcode": "2.0.0",
         "php": "^7.2",
         "barryvdh/laravel-dompdf": "^0.8.7",
         "fideloper/proxy": "^4.0",
