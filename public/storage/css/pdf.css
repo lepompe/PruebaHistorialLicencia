@@ -35,7 +35,12 @@ p.linea {
 }
 .texto-mid {
     position: absolute;
-    top: 25%;
+    top: 20%;
+}
+.codigo {
+    position: absolute;
+    top: 210%;
+    left: 41%;
 }
 /*tabla*/
 table {
@@ -62,7 +67,7 @@ table {
 .texto-footer {
     position: absolute;
     line-height: 1px;
-    bottom: 35%;
+    bottom: 30%;
 }
 /*imagenes */
 img#firma {

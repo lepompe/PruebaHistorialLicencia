@@ -58,6 +58,7 @@ class XmlController extends Controller
                 $solicitud = Solicitud::select('solicitudes.*')->where('no_solicitud','=',$data->ews_no_solicitud)->get();
                 
                 foreach($solicitud as $value){
+                        $id_estado = $value->id_estado;
                         $id_solicitud = $value->id_solicitud;
                         $no_solicitud_api = $value->no_solicitud_api;
                         $f_solicitud = $value->fecha_solicitud;
@@ -65,7 +66,10 @@ class XmlController extends Controller
                         $no_licencia_api = $value->ews_licencia;
                         
                 }
-                
+                $updateEstado = Estado::find($id_estado);
+                $updateEstado->nombre = 'DATOS PAGO RECIBIDO';
+                $updateEstado->save();
+
                 $persona = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
                         ->join('dbo.TipLic_TipoLicencia', 'TipLic_TipoLicencia.TipLic_id', '=', 'Lic_Licencias.TipLic_Id')
                         ->select('Dat_DatosGral.Dat_Nombre',
@@ -128,6 +132,10 @@ class XmlController extends Controller
                 $content = \Storage::disk('xml')->get($nombre_archivo);
                 $url = asset('storage/create_xml/'.$nombre_archivo);
 
+                $updateEstado = Estado::find($id_estado);
+                $updateEstado->nombre = 'XML GENERADO';
+                $updateEstado->save();
+
                 $saveSolicitud = Solicitud::find($id_solicitud);
                 $saveSolicitud->id_electronico = $data->ews_id_electronico;
                 $saveSolicitud->referencia_pago = $data->ews_referencia_pago;
@@ -143,6 +151,9 @@ class XmlController extends Controller
                 $saveSolicitud->xml_url = $url;
                 $saveSolicitud->save();
 
+                $updateEstado = Estado::find($id_estado);
+                $updateEstado->nombre = 'RESPUESTA API2 ENVIADA';
+                $updateEstado->save();
                 return response()->json(['wsp_mensaje'=>'Xml Generado',
                                                 'wsp_no_Solicitud'=>$data->ews_no_solicitud,
                                                 'wsp_no_Solicitud_api'=>$no_solicitud_api,

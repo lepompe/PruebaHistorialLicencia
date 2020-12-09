@@ -7,6 +7,7 @@ use App\datoGral;
 use App\token;
 use App\Estado;
 use App\Solicitud;
+use App\TokenAcceso;
 use DB;
 use Response;
 
@@ -49,7 +50,20 @@ class DatoGralController extends Controller
                                 empty($data->ews_licencia) ||
                                 empty($data->ews_hora_solicitud)
                                 ){
+
+                                        $saveAcceso = new TokenAcceso;
+                                        foreach($token_web_form as $id_token){
+                                                $saveAcceso->id_token = $id_token->id_token;
+                                        }
+                                        $saveAcceso->fecha = date('Y-m-d');
+                                        $saveAcceso->hora = date('H:i:s');
+                                        $saveAcceso->ip = $request->ip();
+                                        $saveAcceso->dato_clave = $data->ews_licencia;
+                                        $saveAcceso->mensaje = 'token utilizado con exito pero con información faltante';
+                                        $saveAcceso->codigo = '400';
+                                        $saveAcceso->save();
                                         return response()->json(array("wsp_mensaje" => 'falta información' ), 400);
+                                        
                                 }
                                 $persona = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
                                 ->join('dbo.TipLic_TipoLicencia', 'TipLic_TipoLicencia.TipLic_id', '=', 'Lic_Licencias.TipLic_Id')
@@ -73,8 +87,8 @@ class DatoGralController extends Controller
                                 $saveSolicitud->llave = $data->ews_llave;
                                 $saveSolicitud->id_tramite = $data->ews_id_tramite;
                                 $saveSolicitud->no_solicitud = $data->ews_no_solicitud;
-                                $saveSolicitud->fecha_solicitud = $data->ews_fecha_solicitud;
-                                $saveSolicitud->hora_solicitud = $data->ews_hora_solicitud;
+                                $saveSolicitud->fecha_solicitud = date('Y-m-d');
+                                $saveSolicitud->hora_solicitud = date('H:i:s');
                                 $saveSolicitud->no_solicitud_api = '';
                                 $saveSolicitud->fecha_solicitud_api = date('Y-m-d');
                                 $saveSolicitud->hora_solicitud_api = date('H:i:s');
@@ -91,7 +105,7 @@ class DatoGralController extends Controller
                                 $saveSolicitud->stripe_red = '';
                                 $saveSolicitud->stripe_estado = '';
                                 $saveSolicitud->xml_url = '';
-                                $saveSolicitud->no_consulta = '1';
+                                $saveSolicitud->no_consulta = '0';
                                 foreach ($persona as $dato){
                                         $saveSolicitud->ews_nombre = $dato->Dat_Nombre;
                                         $saveSolicitud->ews_apellido_paterno = $dato->Dat_Paterno;
@@ -108,6 +122,8 @@ class DatoGralController extends Controller
                                 $no_solicitud_api = Solicitud::find($id_save_solicitud);
                                 $no_solicitud_api->no_solicitud_api = date('Y').'-'.str_pad($id_save_solicitud, 4, "0", STR_PAD_LEFT);
                                 $no_solicitud_api->save();
+
+
 
                                 foreach ($persona as $value) 
                                 {
@@ -144,6 +160,20 @@ class DatoGralController extends Controller
                                                 )       
                                         );        
                                 }
+                        
+                        $saveAcceso = new TokenAcceso;
+                        foreach($token_web_form as $id_token){
+                                $saveAcceso->id_token = $id_token->id_token;
+                        }
+                        $saveAcceso->fecha = date('Y-m-d');
+                        $saveAcceso->hora = date('H:i:s');
+                        $saveAcceso->ip = $request->ip();
+                        foreach($persona as $value){
+                                $saveAcceso->dato_clave = $value->Dat_Folio;
+                        }
+                        $saveAcceso->mensaje = 'token utilizado con exito';
+                        $saveAcceso->codigo = '200';
+                        $saveAcceso->save();
                         return response()->json(['wsp_mensaje'=>'Ciudadano Encontrado',
                                                 'wsp_no_Solicitud'=>$data->ews_no_solicitud,
                                                 'wsp_no_Solicitud_api'=>$no_solicitud_api->no_solicitud_api,
@@ -153,7 +183,19 @@ class DatoGralController extends Controller
 
                                  
                 } elseif($token_web != $data->ews_token){
-                        return response()->json(array("wsp_mensaje" => 'Token Invalido' ), 400); 
+
+                        $saveAcceso = new TokenAcceso;
+                        foreach($token_web_form as $id_token){
+                                $saveAcceso->id_token = $id_token->id_token;
+                        }
+                        $saveAcceso->fecha = date('Y-m-d');
+                        $saveAcceso->hora = date('H:i:s');
+                        $saveAcceso->ip = $request->ip();
+                        $saveAcceso->dato_clave = $data->ews_licencia;
+                        $saveAcceso->mensaje = 'token no utilizado';
+                        $saveAcceso->codigo = '403';
+                        $saveAcceso->save();
+                        return response()->json(array("wsp_mensaje" => 'Token Invalido' ), 403);
                 }                
         }
 }

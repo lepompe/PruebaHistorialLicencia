@@ -2,19 +2,19 @@
 <html lang="es">
 <head>
     <!-- estilos -->
-    <link href="{{ asset(css/pdf.css) }}" rel="stylesheet">
+    <link href="storage/css/pdf.css" rel="stylesheet">
     <!-- fuentes -->
 
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Historial de licencia</title>
+    <title>{{ $nombrepdf }}</title>
 </head>
 <body>
     <header>
-        <img src="{{ asset(img/qr.jpg) }}" alt="" id="qr">
-        <img src="{{ asset(img/ssp.jpg) }}" alt="" id="ssp">
+        <img src="storage/img/qr.jpg" alt="" id="qr">
+        <img src="storage/img/ssp.jpg" alt="" id="ssp">
             <div class="container-top">
                 <p class="depen negritas">Dependencia: </p>
                 <p class="depen negritas linea">DIRECCION ESTATAL DE TRANSITO</p>
@@ -69,16 +69,23 @@
         ROO, A LOS {{ date('d') }} DIAS DEL MES DE {{ strtoupper($meses[date('n')-1]) }} DEL DOS MIL VEINTE.</p>
 
         <div class="container-mid">
-            
+            <div class="codigo">
+                <img src="qrcodes/{{$nombre_archivo}}" alt="" id="codigo">
+            </div>
             <div class="texto-mid">
                 <p class="negritas">ATENTAMENTE</p>
                 <p class="negritas">EL DIRECTOR DE TRANSITO DEL ESTADO</p>
                 <br>
                 <p class="negritas">CMDTE. JORGE CESAR SANTANA POOT</p>
+                
             </div>
-            <img src="img/firma.png" alt="" id="firma">
+            <img src="storage/img/firma.png" alt="" id="firma">
+                
+
+            
+            
+            
         </div>
-       
 <footer>
     <div class="container-bot">
         <div class="texto-footer">
@@ -87,7 +94,7 @@
             <p>(983) 83 29600 y 83 24141, Ext. 140</p>
             <p>Chetumal, Quintana Roo, México</p>
         </div>
-        <img src="{{ asset(img/footer.png) }}" alt="" id="footer">
+        <img src="storage/img/footer.png" alt="" id="footer">
     </div> 
 </footer>
 </body>
